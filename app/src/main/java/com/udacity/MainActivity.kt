@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.udacity.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         custom_button.setOnClickListener {
+
             download()
         }
     }
@@ -62,8 +64,5 @@ class MainActivity : AppCompatActivity() {
         private const val CHANNEL_ID = "channelId"
     }
 
-    fun onRadioButtonClicked(view: View) {
-        //TODO ??
-    }
 
 }

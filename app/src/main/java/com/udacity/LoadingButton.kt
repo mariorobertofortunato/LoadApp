@@ -9,11 +9,11 @@ import android.view.View
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
-//paint initialization with default settings
+//paint object initialization with default settings
 private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
-    textAlign = Paint.Align.LEFT
-    textSize = 40.0f
+    textAlign = Paint.Align.CENTER
+    textSize = 60.0f
     typeface = Typeface.create("", Typeface.BOLD)
 }
 
@@ -39,7 +39,6 @@ class LoadingButton @JvmOverloads constructor(
 
     }
 
-
     /**View initialization with the default attributes (from the attrs.xml)*/
     init {
         isClickable=true
@@ -53,47 +52,41 @@ class LoadingButton @JvmOverloads constructor(
 
     }
 
-
-
-    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val rect = Rect(0,0,width,height)
         drawBackground(canvas, rect)
         drawText(canvas, rect)
+        drawBorder(canvas, rect)
     }
 
-    /**onDraw methods*/
+    /**Draws the rectangle background */
     private fun drawBackground (canvas: Canvas, rect: Rect) {
-
-        /**Draws the rectangle*/
         paint.color= defaultBackgroundColor
         paint.style = Paint.Style.FILL
         canvas.drawRect(rect, paint)
+    }
 
-        /**Draws the border of the rectangle*/
+    /**Draws the text*/
+    private fun drawText(canvas: Canvas, rect: Rect) {
+        paint.color = textColor
+        paint.textAlign =Paint.Align.CENTER
+        canvas.drawText(defaultText ?:"" , rect.exactCenterX(), ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)), paint)
+    }
+
+    /**Draws the border of the rectangle*/
+    //For some reason this method must be called AFTER the text method, otherwise it messes it al up
+    private fun drawBorder (canvas: Canvas, rect: Rect) {
         paint.color = borderColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = borderWidth
         canvas.drawRect(rect, paint)
-
-    }
-
-    private fun drawText(canvas: Canvas, rect: Rect) {
-        paint.color = textColor
-        paint.textAlign =Paint.Align.CENTER
-        canvas.drawText(defaultText ?:"" , rect.exactCenterX(), rect.centerY().toFloat(), paint)
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minw: Int = paddingLeft + paddingRight + suggestedMinimumWidth
         val w: Int = resolveSizeAndState(minw, widthMeasureSpec, 1)
-        val h: Int = resolveSizeAndState(
-            MeasureSpec.getSize(w),
-            heightMeasureSpec,
-            0
-        )
+        val h: Int = resolveSizeAndState(MeasureSpec.getSize(w), heightMeasureSpec, 0)
         widthSize = w
         heightSize = h
         setMeasuredDimension(w, h)
