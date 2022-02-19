@@ -59,10 +59,15 @@
         app:layout_constraintTop_toBottomOf="@id/radio_group"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+
         app:defaultBackgroundColor="@color/colorPrimary"
         app:progressBarColor="@color/colorPrimaryDark"
         app:borderColor="@color/black"
+
         app:defaultText="Download"
-        app:textColor="@color/white" />
+        app:loadingText="We are loading"
+        app:textColor="@color/white"
+
+        app:defaultCircleColor="@color/colorAccent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
