@@ -60,6 +60,7 @@
         android:layout_height="60dp"
         android:layout_margin="20dp"
         app:defaultBackgroundColor="@color/colorPrimary"
+        app:progressBarColor="@color/colorPrimaryDark"
         app:borderColor="@color/black"
         app:defaultText="Download"
         app:textColor="@color/white" />

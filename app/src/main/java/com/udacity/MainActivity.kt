@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
 
         custom_button.setOnClickListener {
-            //custom_button.provaAnimation()
+            Toast.makeText(this, "File is downloading", Toast.LENGTH_SHORT).show()
 
             download()
         }

@@ -3,6 +3,7 @@
     <!--   TODO: create custom attributes for the view-->
     <declare-styleable name="LoadingButton">
         <attr name="defaultBackgroundColor" format="color"/>
+        <attr name="progressBarColor" format="color"/>
         <attr name="borderColor" format="color"/>
         <attr name="defaultText" format="string"/>
         <attr name="textColor" format="color"/>
