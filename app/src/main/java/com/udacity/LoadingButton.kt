@@ -1,9 +1,11 @@
 package com.udacity
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
@@ -17,12 +19,15 @@ private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     typeface = Typeface.create("", Typeface.BOLD)
 }
 
+
 //custom attrs declaration (as "null")
 private var defaultBackgroundColor = 0
 private var borderColor = 0
 
 private var defaultText: String? = null
 private var textColor = 0
+
+private var position = 0
 
 
 private var borderWidth = 14.0f
@@ -34,7 +39,7 @@ class LoadingButton @JvmOverloads constructor(
 
     private var widthSize = 0
     private var heightSize = 0
-    private val valueAnimator = ValueAnimator()
+    private var valueAnimator = ValueAnimator()
     private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
 
     }
@@ -59,29 +64,27 @@ class LoadingButton @JvmOverloads constructor(
         drawText(canvas, rect)
         drawBorder(canvas, rect)
     }
-
-    /**Draws the rectangle background */
-    private fun drawBackground (canvas: Canvas, rect: Rect) {
-        paint.color= defaultBackgroundColor
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(rect, paint)
-    }
-
-    /**Draws the text*/
-    private fun drawText(canvas: Canvas, rect: Rect) {
-        paint.color = textColor
-        paint.textAlign =Paint.Align.CENTER
-        canvas.drawText(defaultText ?:"" , rect.exactCenterX(), ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)), paint)
-    }
-
-    /**Draws the border of the rectangle*/
-    //For some reason this method must be called AFTER the text method, otherwise it messes it al up
-    private fun drawBorder (canvas: Canvas, rect: Rect) {
-        paint.color = borderColor
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = borderWidth
-        canvas.drawRect(rect, paint)
-    }
+            /**Draws the rectangle background */
+            private fun drawBackground(canvas: Canvas, rect: Rect) {
+                paint.color = defaultBackgroundColor
+                paint.style = Paint.Style.FILL
+                canvas.drawRect(rect, paint)
+            }
+            /**Draws the text*/
+            private fun drawText(canvas: Canvas, rect: Rect) {
+                paint.color = textColor
+                paint.textAlign = Paint.Align.CENTER
+                canvas.drawText(
+                    defaultText ?: "", rect.exactCenterX(), ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)), paint)
+            }
+            /**Draws the border of the rectangle*/
+            //For some reason this method must be called AFTER the text method, otherwise it messes it al up
+            private fun drawBorder(canvas: Canvas, rect: Rect) {
+                paint.color = borderColor
+                paint.style = Paint.Style.STROKE
+                paint.strokeWidth = borderWidth
+                canvas.drawRect(rect, paint)
+            }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minw: Int = paddingLeft + paddingRight + suggestedMinimumWidth
@@ -90,6 +93,25 @@ class LoadingButton @JvmOverloads constructor(
         widthSize = w
         heightSize = h
         setMeasuredDimension(w, h)
+    }
+
+
+
+    fun provaAnimation() {
+
+        valueAnimator = ValueAnimator.ofInt(0, widthSize).apply {
+            duration = 3000
+            repeatMode = ValueAnimator.RESTART
+            repeatCount = 1
+            addUpdateListener {
+                widthSize = it.animatedValue as Int
+                invalidate()
+            }
+            valueAnimator.start()
+        }
+
+
+
     }
 
 }
