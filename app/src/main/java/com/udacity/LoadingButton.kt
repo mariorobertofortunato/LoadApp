@@ -9,8 +9,9 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.content.withStyledAttributes
-import kotlin.properties.Delegates
+
 
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -30,14 +31,15 @@ class LoadingButton @JvmOverloads constructor(
     //Text
     private var defaultText: String? = null
     private var loadingText: String? = null
+    private var completedText: String? = null
     private var textColor = 0
     //Circle
     private var circleAnimator = ValueAnimator()
     private var defaultCircleColor = 0
     private var circleProgress = 0.0 //this is the starting sweep angle of the circle that gets animated
 
-    //observe the state of the button (Completed, Clicked, Loading)
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new -> }
+    private var buttonState: ButtonState = ButtonState.Clickable
+    //private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Clickable) { p, old, new -> }
 
     //paint object initialization with default settings
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -52,7 +54,6 @@ class LoadingButton @JvmOverloads constructor(
         invalidate()
         requestLayout()
     }
-
     private val circleUpdateListener = ValueAnimator.AnimatorUpdateListener {
         circleProgress = (it.animatedValue as Float).toDouble()
         invalidate()
@@ -76,6 +77,7 @@ class LoadingButton @JvmOverloads constructor(
             borderColor = getColor(R.styleable.LoadingButton_borderColor,0)
             defaultText = getString(R.styleable.LoadingButton_defaultText)
             loadingText = getString(R.styleable.LoadingButton_loadingText)
+            completedText = getString(R.styleable.LoadingButton_completedText)
             textColor = getColor(R.styleable.LoadingButton_textColor,0)
             defaultCircleColor = getColor(R.styleable.LoadingButton_defaultCircleColor, 0)
         }
@@ -91,12 +93,9 @@ class LoadingButton @JvmOverloads constructor(
     }
             /**Draws the rectangle background */
             private fun drawBackground(canvas: Canvas) {
-                //Default background color
                 paint.color = defaultBackgroundColor
                 paint.style = Paint.Style.FILL
-                canvas.drawRect(0f,0f,width.toFloat(),height.toFloat(), paint)
-                //Background color change = "progress bar".
-                // When the button is clicked its state changes and triggers the progress anim
+                canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
                 if (buttonState == ButtonState.Loading) {
                     paint.color = progressBarColor
                     canvas.drawRect(0f,0f,width*(barProgress/100).toFloat(),height.toFloat(),paint)
@@ -106,17 +105,39 @@ class LoadingButton @JvmOverloads constructor(
             private fun drawText(canvas: Canvas) {
                 paint.color = textColor
                 paint.textAlign = Paint.Align.CENTER
-                if (buttonState == ButtonState.Loading) {
-                    canvas.drawText(
-                        loadingText ?: "", (canvas.width/2).toFloat(), ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)), paint)
-                } else {canvas.drawText(
-                    defaultText ?: "", (canvas.width/2).toFloat(), ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)), paint)
+
+                when (buttonState) {
+                    ButtonState.Loading -> {
+                        canvas.drawText(
+                            loadingText ?: "",
+                            (canvas.width / 2).toFloat(),
+                            ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)),
+                            paint
+                        )
+                    }
+                    ButtonState.Clickable -> {
+                        canvas.drawText(
+                            defaultText ?: "",
+                            (canvas.width / 2).toFloat(),
+                            ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)),
+                            paint
+                        )
+                    }
+                    else -> {
+                        canvas.drawText(
+                            completedText ?: "",
+                            (canvas.width / 2).toFloat(),
+                            ((canvas.height / 2) - ((paint.descent() + paint.ascent()) / 2)),
+                            paint
+                        )
+                    }
                 }
             }
             /**Draws the circle*/
             private fun drawCircle(canvas: Canvas) {
                 paint.color = defaultCircleColor
                 paint.style = Paint.Style.FILL
+                paint.isAntiAlias = true
                 if (buttonState == ButtonState.Loading) {
                 canvas.drawArc(
                     RectF(
@@ -127,7 +148,6 @@ class LoadingButton @JvmOverloads constructor(
                     ), 0f, circleProgress.toFloat(), true, paint
                 )}
             }
-
             /**Draws the border of the rectangle*/
             //For some reason this method must be called AFTER the text method, otherwise it messes it all up
             private fun drawBorder(canvas: Canvas) {
@@ -148,22 +168,24 @@ class LoadingButton @JvmOverloads constructor(
 
     /**Methods*/
 
-    //When button clicked change the state of the button and start the animations
-    override fun performClick(): Boolean {
-        super.performClick()
-        if (buttonState == ButtonState.Completed)
-            buttonState = ButtonState.Loading
-        animations()
-        return true
-    }
-
-    private fun animations() {
+    fun animations() {
         barAnimator.start()
         circleAnimator.start()
-
-
-
+        barAnimator.doOnEnd {
+            buttonState = ButtonState.Completed
+        }
     }
+
+
+    fun setButtonToClickable() {
+        buttonState = ButtonState.Clickable
+    }
+
+    fun setState(state: ButtonState) {
+        buttonState = state
+    }
+
+
 
 
 

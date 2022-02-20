@@ -1,6 +1,5 @@
 package com.udacity
 
-import android.animation.ValueAnimator
 import android.app.DownloadManager
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var url = ""
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,23 +36,35 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-        /**Button welcome animation! This one's very cool!*/
+        /**Button welcome animation!*/
         custom_button.alpha = 0f
         custom_button.translationY = 50f
         custom_button.animate().alpha(1f).translationYBy(-100f).duration = 1000
 
+        radio_glide.setOnClickListener {
+            custom_button.setState(ButtonState.Clickable)
+            url = GLIDE_URL
+        }
 
+        radio_udacity.setOnClickListener {
+            custom_button.setState(ButtonState.Clickable)
+            url = UDACITY_URL
+        }
+
+        radio_retrofit.setOnClickListener {
+            custom_button.setState(ButtonState.Clickable)
+            url = RETROFIT_URL
+        }
 
         custom_button.setOnClickListener {
-            if (url !="") {
-                download()
+            if (url != "") {
+                custom_button.setState(ButtonState.Loading)
+                custom_button.animations()
                 Toast.makeText(this, "File is downloading", Toast.LENGTH_SHORT).show()
+                //TODO download()
             } else {
                 Toast.makeText(this, "Please select a file to download", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
     }
 
