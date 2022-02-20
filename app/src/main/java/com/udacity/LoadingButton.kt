@@ -176,13 +176,16 @@ class LoadingButton @JvmOverloads constructor(
         }
     }
 
-
-    fun setButtonToClickable() {
-        buttonState = ButtonState.Clickable
+    fun stopAnimations() {
+        barAnimator.cancel()
+        circleAnimator.cancel()
     }
 
     fun setState(state: ButtonState) {
         buttonState = state
+        if (state is ButtonState.Clickable) {
+            invalidate()
+        }
     }
 
 

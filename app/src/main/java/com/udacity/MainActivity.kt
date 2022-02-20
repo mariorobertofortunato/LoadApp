@@ -61,10 +61,8 @@ class MainActivity : AppCompatActivity() {
                 custom_button.setState(ButtonState.Loading)
                 custom_button.animations()
                 Toast.makeText(this, "File is downloading", Toast.LENGTH_SHORT).show()
-                Log.d("TAG","IfBtnClick")
                 //TODO download()
             } else {
-                Log.d("TAG","ElseBtnClick")
                 Toast.makeText(this, "Please select a file to download", Toast.LENGTH_SHORT).show()
             }
         }
@@ -73,6 +71,13 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+
+            /** TODO queste tre linee di code sono da checkare*/
+            radio_group.clearCheck()
+            custom_button.stopAnimations()
+            custom_button.setState(ButtonState.Clickable)
+            /** TODO checkare quando arriverò a usare il receiver*/
+
         }
     }
 
