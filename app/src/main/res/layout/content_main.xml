@@ -32,19 +32,19 @@
             android:id="@+id/radio_glide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/glide_radio_desc" />
+            android:text="@string/glide_desc" />
         <RadioButton
             style="@style/RadioButtonStyle"
             android:id="@+id/radio_udacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/loadapp_radio_desc" />
+            android:text="@string/loadapp_desc" />
         <RadioButton
             style="@style/RadioButtonStyle"
             android:id="@+id/radio_retrofit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/retrofit_radio_desc" />
+            android:text="@string/retrofit_desc" />
     </RadioGroup>
 
     <com.udacity.LoadingButton
