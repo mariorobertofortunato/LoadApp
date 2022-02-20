@@ -61,8 +61,10 @@ class MainActivity : AppCompatActivity() {
                 custom_button.setState(ButtonState.Loading)
                 custom_button.animations()
                 Toast.makeText(this, "File is downloading", Toast.LENGTH_SHORT).show()
+                Log.d("TAG","IfBtnClick")
                 //TODO download()
             } else {
+                Log.d("TAG","ElseBtnClick")
                 Toast.makeText(this, "Please select a file to download", Toast.LENGTH_SHORT).show()
             }
         }
