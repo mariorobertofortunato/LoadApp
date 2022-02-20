@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -21,15 +22,12 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-
 class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
     private var downloadStatus = ""
 
     private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
 
     private var url = ""
     private var filename = ""
@@ -44,9 +42,9 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         /**Initialize the notification channel*/
-        createChannel(getString(R.string.notification_channel_id), getString(R.string.notification_channel_name))
+        createChannel(CHANNEL_ID, getString(R.string.notification_channel_name))
 
-        /**Button init animation*/
+        /**Button "welcome" animation*/
         custom_button.alpha = 0f
         custom_button.translationY = 50f
         custom_button.animate().alpha(1f).translationYBy(-100f).duration = 1000
@@ -99,7 +97,6 @@ class MainActivity : AppCompatActivity() {
             //Received the file the notif is sent (create instance + start build&send method)
             notificationManager = ContextCompat.getSystemService(context!!,NotificationManager::class.java) as NotificationManager
             notificationManager.sendNotification(context.getText(R.string.notification_description).toString(),context)
-
         }
     }
     private fun download() {
@@ -117,6 +114,7 @@ class MainActivity : AppCompatActivity() {
     /**NOTIFICATION SECTION*/
 
     //The method called to build (and send) the notif
+    @SuppressLint("UnspecifiedImmutableFlag")
     fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
                 /**Building blocks of the notif*/
@@ -132,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                     NOTIFICATION_ID,
                     detailIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
-
 
                 //Notif style (=image)
                 val notifImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.ic_assistant_black_24dp)
@@ -151,11 +148,8 @@ class MainActivity : AppCompatActivity() {
             .setLargeIcon(notifImage)
             .setContentText("Download Complete!")
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .addAction(R.drawable.ic_assistant_black_24dp,
-                applicationContext.getString(R.string.notification_button),
-                detailPendingIntent)
+            .addAction(R.drawable.ic_assistant_black_24dp, applicationContext.getString(R.string.notification_button), detailPendingIntent)
 
-        //Actual sending of the notification
         notify(NOTIFICATION_ID, builder.build())
     }
 
@@ -168,20 +162,12 @@ class MainActivity : AppCompatActivity() {
         notificationChannel.enableLights(true)
         notificationChannel.enableVibration(true)
         notificationChannel.lightColor = Color.RED
-        //TODO CHECK WHERE THIS STRING GONNA BE:
-        notificationChannel.description = "WHERE IS THIS GONNA BE SHOWN???"
+        notificationChannel.description = "Channel"
 
         notificationManager = ContextCompat.getSystemService(this, NotificationManager::class.java) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
-
     }
 
-
-
-
-
-
-    //TODO why aren't these in a const file? try & see what happens
     companion object {
         private const val UDACITY_URL =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
@@ -192,8 +178,5 @@ class MainActivity : AppCompatActivity() {
         private const val CHANNEL_ID =
             "channelId"
         private const val NOTIFICATION_ID = 0
-
     }
-
-
 }

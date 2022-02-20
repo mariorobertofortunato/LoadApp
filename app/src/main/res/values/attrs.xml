@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--   TODO: create custom attributes for the view-->
+
+    <!-- custom attributes for the Loading Button Custom view-->
+
     <declare-styleable name="LoadingButton">
         <!--Background + Progress Bar -->
         <attr name="defaultBackgroundColor" format="color"/>
@@ -13,7 +15,6 @@
         <attr name="textColor" format="color"/>
         <!--Circle -->
         <attr name="defaultCircleColor" format="color"/>
-
 
     </declare-styleable>
 </resources>

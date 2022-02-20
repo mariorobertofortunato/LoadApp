@@ -13,13 +13,14 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
 
+        //Parameters passed with the notification intent
         val name = intent.getStringExtra("name")
         val status = intent.getStringExtra("status")
 
         file_value.text = name
         status_value.text = status
 
-        //The button bring the user back to main screen
+        //The OK button brings the user back to main screen
         button.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

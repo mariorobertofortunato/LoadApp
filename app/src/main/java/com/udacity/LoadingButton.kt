@@ -12,7 +12,6 @@ import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.withStyledAttributes
 
-
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
@@ -39,7 +38,6 @@ class LoadingButton @JvmOverloads constructor(
     private var circleProgress = 0.0 //this is the starting sweep angle of the circle that gets animated
 
     private var buttonState: ButtonState = ButtonState.Clickable
-    //private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Clickable) { p, old, new -> }
 
     //paint object initialization with default settings
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -48,7 +46,7 @@ class LoadingButton @JvmOverloads constructor(
         textSize = 60.0f
         typeface = Typeface.create("", Typeface.BOLD)
     }
-    //TODO capire bene cosa fa un updatelistener
+    //Progrerss bar & Anim Circle UpdateListeners
     private val barUpdateListener = ValueAnimator.AnimatorUpdateListener {
         barProgress = (it.animatedValue as Float).toDouble()
         invalidate()
@@ -167,7 +165,6 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     /**Methods*/
-
     fun animations() {
         barAnimator.start()
         circleAnimator.start()
@@ -175,21 +172,14 @@ class LoadingButton @JvmOverloads constructor(
             buttonState = ButtonState.Completed
         }
     }
-
     fun stopAnimations() {
         barAnimator.cancel()
         circleAnimator.cancel()
     }
-
     fun setState(state: ButtonState) {
         buttonState = state
         if (state is ButtonState.Clickable) {
             invalidate()
         }
     }
-
-
-
-
-
 }

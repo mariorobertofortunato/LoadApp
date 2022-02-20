@@ -21,4 +21,5 @@
     <string name="retrofit_desc">Retrofit - Type-safe HTTP client for Android and Java by Square, Inc.</string>
     <string name="file">File</string>
     <string name="status">Status</string>
+    <string name="ok">OK</string>
 </resources>
