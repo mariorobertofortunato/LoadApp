@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                     .bigLargeIcon(null)
 
         /**Notification builder: assembles all the building blocks of the notification*/
-        val builder = NotificationCompat.Builder(applicationContext, applicationContext.getString(R.string.notification_channel_id))
+        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_assistant_black_24dp)
             .setContentTitle(applicationContext.getString(R.string.notification_title))
             .setContentText(messageBody)
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             .setStyle(bigPicStyle)
             .setLargeIcon(notifImage)
             .setContentText("Download Complete!")
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(R.drawable.ic_assistant_black_24dp, applicationContext.getString(R.string.notification_button), detailPendingIntent)
 
         notify(NOTIFICATION_ID, builder.build())
