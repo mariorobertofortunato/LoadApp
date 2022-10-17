@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     applicationContext,
                     NOTIFICATION_ID,
                     detailIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_IMMUTABLE)
 
                 //Notif style (=image)
                 val notifImage = BitmapFactory.decodeResource(applicationContext.resources,R.drawable.ic_assistant_black_24dp)
